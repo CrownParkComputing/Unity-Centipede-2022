@@ -5,14 +5,14 @@ public class Dart : MonoBehaviour
     private new Rigidbody2D rigidbody;
     private new Collider2D collider;
     private Transform parent;
-
+    private AudioSource playSound;
     public float speed = 50f;
 
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
         rigidbody.bodyType = RigidbodyType2D.Kinematic;
-
+        playSound = GetComponent<AudioSource>();
         collider = GetComponent<Collider2D>();
         collider.enabled = false;
 
@@ -26,6 +26,7 @@ public class Dart : MonoBehaviour
             transform.SetParent(null);
             rigidbody.bodyType = RigidbodyType2D.Dynamic;
             collider.enabled = true;
+            playSound.PlayOneShot(playSound.clip);
         }
     }
 

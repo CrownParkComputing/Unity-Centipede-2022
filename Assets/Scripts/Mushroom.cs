@@ -24,10 +24,19 @@ public class Mushroom : MonoBehaviour
         }
     }
 
+    public void Heal()
+    {
+        health = states.Length;
+        spriteRenderer.sprite = states[0];
+        
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        FindObjectOfType<GameManager>().IncreaseScore(10);
         if (collision.gameObject.layer == LayerMask.NameToLayer("Dart")){
             Damage(1);
+            
         }
     }
 

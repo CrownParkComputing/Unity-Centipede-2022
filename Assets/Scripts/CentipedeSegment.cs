@@ -9,12 +9,15 @@ public class CentipedeSegment : MonoBehaviour
     public CentipedeSegment behind {get;set;}
     public bool isHead => ahead == null;
     
-    
     private Vector2 direction = Vector2.right + Vector2.down;
     private Vector2 targetPostion;
 
+    [Header("Scoring")]
+    public int pointsHead = 100;
+    public int pointsBody = 10;
     private void Awake()
     {
+        
         spriteRenderer = GetComponent<SpriteRenderer>(); 
         targetPostion = transform.position;      
     }
@@ -32,7 +35,11 @@ public class CentipedeSegment : MonoBehaviour
         Vector2 movementDirection = (targetPostion - currentPosition).normalized;
         float angle = Mathf.Atan2(movementDirection.y, movementDirection.x);
         transform.rotation = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
+    
     }
+
+    
+
 
     public void UpdateHeadSegment()
     {
@@ -79,10 +86,15 @@ public class CentipedeSegment : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.enabled && collision.gameObject.layer == LayerMask.NameToLayer("Dart"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player")) {
+            GameManager.Instance.ResetRound();
+        }
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Dart") && collision.collider.enabled)
         {
             collision.collider.enabled = false;
             centipede.Remove(this);
+            FindObjectOfType<GameManager>().IncreaseScore(50);
         }
     }
 
