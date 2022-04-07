@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     public MushroomField mushroomField;
     public Blaster blaster;
+    public Fleas fleas;
 
     bool gameOver = true;
     public bool GameOver { get { return gameOver; } }
@@ -61,12 +62,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void StartGame()
-    {
-        NewGame();
-    }
-
-    private void NewGame()
+    public void NewGame()
     {
         SetPageState(PageState.Game);
         SetScore(0);
@@ -84,6 +80,7 @@ public class GameManager : MonoBehaviour
         blaster.Respawn();
         mushroomField.ClearField();
         mushroomField.GenerateField();
+        fleas.Respawn();
     }
   
     
@@ -98,6 +95,7 @@ public class GameManager : MonoBehaviour
          
          blaster.Respawn();
          mushroomField.HealField();
+         fleas.Respawn();
          
     }
 

@@ -33,9 +33,10 @@ public class Mushroom : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        FindObjectOfType<GameManager>().IncreaseScore(10);
+        
         if (collision.gameObject.layer == LayerMask.NameToLayer("Dart")){
             Damage(1);
+            FindObjectOfType<GameManager>().IncreaseScore(10);
             
         }
     }
