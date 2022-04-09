@@ -12,12 +12,17 @@ public class Mushroom : MonoBehaviour
         health = states.Length;    
     }
 
-    private void Damage(int amount)
+    private Sprite[] GetStates()
+    {
+        return states;
+    }
+
+    private void Damage(int amount, Sprite[] states)
     {
         health -= amount;
         if (health > 0)
         {
-            spriteRenderer.sprite = states[states.Length - health];
+            spriteRenderer.sprite = states[^health];
         }
         else{
             Destroy(gameObject);
@@ -35,7 +40,7 @@ public class Mushroom : MonoBehaviour
     {
         
         if (collision.gameObject.layer == LayerMask.NameToLayer("Dart")){
-            Damage(1);
+            Damage(1, GetStates());
             FindObjectOfType<GameManager>().IncreaseScore(10);
             
         }

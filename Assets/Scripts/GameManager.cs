@@ -1,20 +1,30 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
+    [System.Serializable]
+    public class LevelData
+    {
+        public int level;
+        public Centipede centipede;
+        public Vector2 centipedeStart;
+        public Mushroom mushroom;
+        public int fleaIntervalSeconds;
+        public int snailFrequencySeconds;
+    }
+
+    public List<LevelData> levelData;
+    int level;
+
     public static GameManager Instance {get; private set;}
-    public Centipede centipede;
-    public Centipede centipede2;
-    public Vector2 centipedeStart;
-    public Vector2 centipede2Start;
     public Text scoreText;
     public Text highScoreText;
     private int score;
     private int highScore;
     private int lives = 3;
-    private AudioSource mySound;
     public GameObject startPage;
     public GameObject playGamePage;
     public GameObject gameOverPage;
@@ -23,6 +33,13 @@ public class GameManager : MonoBehaviour
     public MushroomField mushroomField;
     public Blaster blaster;
     public Fleas fleas;
+    public Snails snails;
+
+
+    private Centipede centipede;
+    private Vector2 startPosition;
+    private int fleaIntervalSeconds;
+    private int snailFrequencySeconds;
 
     bool gameOver = true;
     public bool GameOver { get { return gameOver; } }
@@ -33,15 +50,6 @@ public class GameManager : MonoBehaviour
         GameOver,
         Game
     }
-    private void Update()
-    {
-        if (lives <= 0 &&  Input.anyKeyDown)
-        {
-            NewGame();
-        }
-    }
-
-
 
     private void Awake()
     {
@@ -52,7 +60,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         SetPageState(PageState.Start);
-        mySound = GetComponent<AudioSource>();
     }
 
     private void OnDestroy()
@@ -64,28 +71,37 @@ public class GameManager : MonoBehaviour
 
     public void NewGame()
     {
+        level = 0;
+        SetLevelData(level);
         SetPageState(PageState.Game);
         SetScore(0);
         SetLives(3);
         NewLevel();
-         
-        string newCentipede = "Centipede";
-        GameObject Centipede = ObjectPooler.SharedInstance.GetPooledObject(newCentipede);
+    }
+
+    private void SetLevelData(int level)
+    {
+        centipede = levelData[level].centipede;
+        startPosition = levelData[level].centipedeStart;
+        fleaIntervalSeconds = levelData[level].fleaIntervalSeconds; 
+        snailFrequencySeconds = levelData[level].snailFrequencySeconds; 
     }
 
     private void NewLevel()
     {
-        centipede.Respawn(centipedeStart);
-        centipede2.Respawn(centipede2Start);
+        centipede.Respawn(startPosition);
         blaster.Respawn();
         mushroomField.ClearField();
         mushroomField.GenerateField();
-        fleas.Respawn();
+        fleas.StartFleas(fleaIntervalSeconds);
+        snails.StartSnails(snailFrequencySeconds);
     }
   
     
     public void ResetRound()
     {
+        fleas.KillFleas();
+        snails.KillSnails();
         lives--;
          if (lives <-0)
          {
@@ -95,7 +111,8 @@ public class GameManager : MonoBehaviour
          
          blaster.Respawn();
          mushroomField.HealField();
-         fleas.Respawn();
+         fleas.StartFleas(fleaIntervalSeconds);
+         snails.StartSnails(snailFrequencySeconds);
          
     }
 
@@ -106,8 +123,9 @@ public class GameManager : MonoBehaviour
 
     public void NextLevel()
     {
-        centipede.centipedeSpeed *= 1.1f;
-        centipede.Respawn(centipedeStart);
+        level++;
+        SetLevelData(level);
+        NewLevel();
     }
 
 
@@ -129,8 +147,8 @@ public class GameManager : MonoBehaviour
                 break;
             case PageState.GameOver:
                 gameStatsPage.SetActive(true);      
-                startPage.SetActive(false);
-                gameOverPage.SetActive(true);
+                startPage.SetActive(true);
+                gameOverPage.SetActive(false);
                 playGamePage.SetActive(false);
                 break;
             case PageState.Game:
@@ -147,11 +165,7 @@ public class GameManager : MonoBehaviour
         SetPageState(PageState.GameOver);
         blaster.gameObject.SetActive(false);
         mushroomField.ClearField();
-
-    }
-    public void AdvanceScore(int amount)
-    {
-        SetScore(score + amount);
+        fleas.KillFleas();
 
     }
     private void SetScore (int score)

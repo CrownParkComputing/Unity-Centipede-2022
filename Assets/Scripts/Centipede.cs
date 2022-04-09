@@ -57,8 +57,9 @@ public class Centipede : MonoBehaviour
         if (centipedeSegments.Length <= 0)
             {
                 mySound.Stop();
-                
-            }
+                GameManager.Instance.NextLevel();
+
+        }
     }
     private CentipedeSegment GetSegmentAt(int index)
     {
@@ -97,9 +98,6 @@ public class Centipede : MonoBehaviour
         segments.Remove(segment);
         Destroy(segment.gameObject);
 
-        if (segments.Count == 0) {
-            GameManager.Instance.NextLevel();
-        }
     }
     
 }

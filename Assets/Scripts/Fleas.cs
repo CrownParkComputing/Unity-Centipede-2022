@@ -1,11 +1,30 @@
+using System.Collections;
 using UnityEngine;
 
 public class Fleas : MonoBehaviour
 {
     public Flea fleaPrefab;
     public MushroomField mushroomField;
+    private AudioSource mySound;
+    private int fleaInterval;
 
-    public void Respawn()
+    private void Awake()
+    {
+        mySound = GetComponent<AudioSource>();
+
+    }
+
+    public void StartFleas(int interval)
+    {
+        fleaInterval = interval;
+        StartCoroutine(nameof(RepeatSpawn));
+    }
+    public void KillFleas()
+    {
+        StopAllCoroutines();
+    }
+
+    private void Respawn()
     {
         BoxCollider2D field = mushroomField.GetComponent<BoxCollider2D>();
         Bounds area = field.bounds;
@@ -13,7 +32,25 @@ public class Fleas : MonoBehaviour
 
         position.x = Mathf.Round(Random.Range(area.min.x, area.max.x));
         position.y = area.max.y;
-        Flea thisFlea = Instantiate(fleaPrefab, position, Quaternion.identity, transform);
-        thisFlea.SetTarget(position);
+        _ = Instantiate(fleaPrefab, position, Quaternion.identity, transform);
+        if (!mySound.isPlaying)
+        {
+            mySound.Play();
+        }
+
     }
+
+    private IEnumerator RepeatSpawn()
+    {
+        int i= 100;
+        while (i>0)
+        {
+            Respawn();
+            yield return new WaitForSeconds(fleaInterval);
+        } 
+
+
+    }
+
+
 }
