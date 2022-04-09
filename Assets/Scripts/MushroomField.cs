@@ -4,9 +4,6 @@ using UnityEngine;
 public class MushroomField : MonoBehaviour
 {
     private BoxCollider2D area;
-    public Mushroom prefab;
-    public Mushroom prefab2;
-    public int amount = 25;
 
 
     private void Awake()
@@ -15,14 +12,9 @@ public class MushroomField : MonoBehaviour
     }
 
 
-    public void GenerateField()
+    public void GenerateField(Mushroom thisMushroom, int thisAmount)
     {
 
-        GenerateMushroomType(prefab, amount);
-        GenerateMushroomType(prefab2, amount);
-    }
-    private void GenerateMushroomType(Mushroom thisMushroom, int thisAmount)
-    {
         Bounds bounds = area.bounds;
 
         for (int i = 0; i < thisAmount; i++)
