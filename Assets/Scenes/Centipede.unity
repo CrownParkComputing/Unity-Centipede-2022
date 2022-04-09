@@ -234,10 +234,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   segmentPrefab: {fileID: 4776103373336714153, guid: 5d1c254d530f0d04aab5588dcd5a177a, type: 3}
-  mushroomPrefab: {fileID: 179143526279867947, guid: 1b2a9a7f1eef0c14fa0eb1888ab30298, type: 3}
+  mushroomField: {fileID: 540182778}
   headSprite: {fileID: 21300000, guid: be398b8bbaf039e48b42cf210f5a7bac, type: 3}
   bodySprite: {fileID: 21300000, guid: ccb45c2a98515bb46a1541378750ba19, type: 3}
-  centipedeLength: 10
   centipedeSpeed: 12
   pointsHead: 100
   pointsBody: 10
@@ -874,9 +873,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 899248a5ff833104da161f3521c0a8e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 179143526279867947, guid: 1b2a9a7f1eef0c14fa0eb1888ab30298, type: 3}
-  prefab2: {fileID: 7596736685584825156, guid: e902e7025c013b84dada51630bc13f62, type: 3}
-  amount: 25
 --- !u!61 &540182779
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -928,7 +924,6 @@ GameObject:
   m_Component:
   - component: {fileID: 550553903}
   - component: {fileID: 550553902}
-  - component: {fileID: 550553904}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -948,19 +943,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29e4ff1c437fa6a4caf65557cde7e138, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  centipede: {fileID: 784216506}
-  centipede2: {fileID: 138632009}
-  centipedeStart: {x: 1, y: 21}
-  centipede2Start: {x: 10, y: 22}
   scoreText: {fileID: 1226411411}
   highScoreText: {fileID: 81575013}
   startPage: {fileID: 1574082075}
   playGamePage: {fileID: 1032155875}
   gameOverPage: {fileID: 699075818}
   gameStatsPage: {fileID: 1032155875}
-  mushroomField: {fileID: 540182778}
   blaster: {fileID: 416172652}
+  mushroomField: {fileID: 540182778}
   fleas: {fileID: 1899308372}
+  snails: {fileID: 1220144733}
+  levelData:
+  - level: 0
+    centipede: {fileID: 784216506}
+    centipedeLengthMax: 5
+    centipedesPerLevelMax: 0
+    mushroomPrefab: {fileID: 7596736685584825156, guid: e902e7025c013b84dada51630bc13f62, type: 3}
+    mushroomAmount: 40
+    fleaIntervalSeconds: 6
+    snailIntervalSeconds: 5
+  - level: 1
+    centipede: {fileID: 138632009}
+    centipedeLengthMax: 0
+    centipedesPerLevelMax: 0
+    mushroomPrefab: {fileID: 4282490269126506189, guid: a9bec02f0da039449b79f9da56309e33, type: 3}
+    mushroomAmount: 50
+    fleaIntervalSeconds: 4
+    snailIntervalSeconds: 5
 --- !u!4 &550553903
 Transform:
   m_ObjectHideFlags: 0
@@ -976,25 +985,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &550553904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 550553901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95f0ae194b9f87144881abd9ad94d57c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemsToPool:
-  - amountToPool: 10
-    objectToPool: {fileID: 784216505}
-    storeHere: {fileID: 784216505}
-    shouldExpand: 0
-  pooledObjects: []
-  pooledObjectsByTag: []
 --- !u!1 &605307104
 GameObject:
   m_ObjectHideFlags: 0
@@ -1368,10 +1358,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   segmentPrefab: {fileID: 1202075792346123828, guid: b22f16bc3fd61274f8bd5407e84e9aa2, type: 3}
-  mushroomPrefab: {fileID: 7596736685584825156, guid: e902e7025c013b84dada51630bc13f62, type: 3}
+  mushroomField: {fileID: 540182778}
   headSprite: {fileID: 21300000, guid: 7cf56aa9a0c31cd409fd215e7fc25361, type: 3}
   bodySprite: {fileID: 21300000, guid: b0b378c83517636499657c5d2f6bb261, type: 3}
-  centipedeLength: 15
   centipedeSpeed: 10
   pointsHead: 100
   pointsBody: 10
@@ -1581,6 +1570,7 @@ Transform:
   - {fileID: 199896319}
   - {fileID: 822491604}
   - {fileID: 1899308371}
+  - {fileID: 1220144732}
   - {fileID: 1382481852}
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -1718,6 +1708,148 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &1220144731
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1220144732}
+  - component: {fileID: 1220144734}
+  - component: {fileID: 1220144733}
+  m_Layer: 0
+  m_Name: Snails
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1220144732
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220144731}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1032155876}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1220144733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220144731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29fd81a87114ff54da89a9f9dbf4b01d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  snailPrefab: {fileID: 6217796734343996783, guid: da4e84ccf316c0841b5fa02ec82aba93, type: 3}
+--- !u!82 &1220144734
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220144731}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 99c3e02a218385846a8be70f961aa4e8, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.072
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1226411409
 GameObject:
   m_ObjectHideFlags: 0
@@ -1913,7 +2045,7 @@ Transform:
   - {fileID: 784216507}
   - {fileID: 138632010}
   m_Father: {fileID: 1032155876}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1574082075
 GameObject:
@@ -2116,7 +2248,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fleaPrefab: {fileID: 6766359851684887671, guid: 9fbff2bc6ac58cc4b9ce35f56ead65fd, type: 3}
   mushroomField: {fileID: 540182778}
-  fleaInterval: 5
 --- !u!82 &1899308373
 AudioSource:
   m_ObjectHideFlags: 0

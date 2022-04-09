@@ -68,6 +68,8 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         SetPageState(PageState.Start);
+
+        highScore = PlayerPrefs.GetInt("Highscore");
     }
 
     private void OnDestroy()
@@ -177,6 +179,11 @@ public class GameManager : MonoBehaviour
         blaster.gameObject.SetActive(false);
         mushroomField.ClearField();
         fleas.KillFleas();
+        int savedScore = PlayerPrefs.GetInt("Highscore");
+        if (highScore > savedScore)
+        {
+            PlayerPrefs.SetInt("Highscore", highScore);
+        }
 
     }
     private void SetScore (int score)
