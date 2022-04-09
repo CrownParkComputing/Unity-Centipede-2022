@@ -10,14 +10,14 @@ public class GameManager : MonoBehaviour
     {
         public int level;
         public Centipede centipede;
-        public Vector2 centipedeStart;
-        public Mushroom mushroom;
+        public int centipedeLengthMax;
+        public int centipedesPerLevelMax;
+        public Mushroom mushroomPrefab;
+        public int mushroomAmount;
         public int fleaIntervalSeconds;
-        public int snailFrequencySeconds;
-    }
+        public int snailIntervalSeconds;
 
-    public List<LevelData> levelData;
-    int level;
+    }
 
     public static GameManager Instance {get; private set;}
     public Text scoreText;
@@ -29,17 +29,25 @@ public class GameManager : MonoBehaviour
     public GameObject playGamePage;
     public GameObject gameOverPage;
     public GameObject gameStatsPage;
-
-    public MushroomField mushroomField;
     public Blaster blaster;
+    public MushroomField mushroomField;
     public Fleas fleas;
     public Snails snails;
 
+    [Header("Level Data")]
+    public List<LevelData> levelData;
+    int level;
 
     private Centipede centipede;
-    private Vector2 startPosition;
+    private int centipedeLengthMax;
+    private int centipedesPerLevelMax;
+    private Mushroom mushroomPrefab;
+    private int mushroomAmount;
+
+
+
     private int fleaIntervalSeconds;
-    private int snailFrequencySeconds;
+    private int snailIntervalSeconds;
 
     bool gameOver = true;
     public bool GameOver { get { return gameOver; } }
@@ -82,19 +90,22 @@ public class GameManager : MonoBehaviour
     private void SetLevelData(int level)
     {
         centipede = levelData[level].centipede;
-        startPosition = levelData[level].centipedeStart;
         fleaIntervalSeconds = levelData[level].fleaIntervalSeconds; 
-        snailFrequencySeconds = levelData[level].snailFrequencySeconds; 
+        snailIntervalSeconds = levelData[level].snailIntervalSeconds;
+        centipedeLengthMax = levelData[level].centipedeLengthMax;   
+        centipedesPerLevelMax = levelData[level].centipedesPerLevelMax;
+        mushroomPrefab = levelData[level].mushroomPrefab;
+        mushroomAmount = levelData[level].mushroomAmount;   
     }
 
     private void NewLevel()
     {
-        centipede.Respawn(startPosition);
+        centipede.Respawn(mushroomPrefab, centipedeLengthMax);
         blaster.Respawn();
         mushroomField.ClearField();
-        mushroomField.GenerateField();
+        mushroomField.GenerateField(mushroomPrefab, mushroomAmount);
         fleas.StartFleas(fleaIntervalSeconds);
-        snails.StartSnails(snailFrequencySeconds);
+        snails.StartSnails(snailIntervalSeconds);
     }
   
     
@@ -112,7 +123,7 @@ public class GameManager : MonoBehaviour
          blaster.Respawn();
          mushroomField.HealField();
          fleas.StartFleas(fleaIntervalSeconds);
-         snails.StartSnails(snailFrequencySeconds);
+         snails.StartSnails(snailIntervalSeconds);
          
     }
 

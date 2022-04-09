@@ -7,19 +7,24 @@ public class Centipede : MonoBehaviour
     private CentipedeSegment[] centipedeSegments;
     private AudioSource mySound;
     public CentipedeSegment segmentPrefab;
-    public Mushroom mushroomPrefab;
+    public MushroomField mushroomField;
     public Sprite headSprite;
     public Sprite bodySprite;
-    public float centipedeLength = 10f;
+    private float centipedeLength = 10f;
     public float centipedeSpeed = 4f;
+    private Mushroom mushroomPrefab;
+
     [Header("Scoring")]
     public int pointsHead = 100;
     public int pointsBody = 10;
     public LayerMask collisionMask;
     public BoxCollider2D homeArea;
 
-    public void Respawn(Vector2 startPosition)
+
+    public void Respawn(Mushroom prefab, int maxLength)
     {
+        mushroomPrefab = prefab;
+        centipedeLength = Mathf.Round(Random.Range(1, maxLength));    
         mySound = GetComponent<AudioSource>();
         foreach (CentipedeSegment segment in segments) {
             Destroy(segment.gameObject);
@@ -29,6 +34,12 @@ public class Centipede : MonoBehaviour
 
         for (int i = 0; i < centipedeLength; i++)
         {
+            BoxCollider2D field = mushroomField.GetComponent<BoxCollider2D>();
+            Bounds area = field.bounds;
+            Vector2 startPosition = Vector2.zero;
+
+            startPosition.x = Mathf.Round(Random.Range(area.min.x-centipedeLength, area.max.x-centipedeLength));
+            startPosition.y = area.max.y;
             Vector2 position = GridPosition(startPosition) + (Vector2.left * i);
             CentipedeSegment segment = Instantiate(segmentPrefab, position, Quaternion.identity, transform);
             segment.spriteRenderer.sprite = i == 0 ? headSprite : bodySprite;
